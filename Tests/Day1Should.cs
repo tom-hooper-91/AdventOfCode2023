@@ -12,8 +12,8 @@ namespace Tests
         }
 
         private static object[] _totalSources = {
-            new object[] { new[] { "14gxqgqsqqbxfpxnbccjc33eight", "eight2sevenkl" }, 35 },
-            new object[] { new[] { "14gxqgqsqqbxfpxnbccjc33eight", "eight2sevenkl", "mrjstg5onetwoeightgcczx8vgrgl", "9246", "ninetwo2crrqk2grsctqxqbcrmrdsqbrz9eight" }, 218 }
+            new object[] { new[] { "two1nine", "eightwothree" }, 112 },
+            new object[] { new[] { "two1nine", "eightwothree", "abcone2threexyz", "xtwone3four", "4nineeightseven2", "zoneight234", "7pqrstsixteen" }, 281 }
         };
     }
 }
