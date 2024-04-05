@@ -6,7 +6,7 @@ namespace Tests
     public class Day1Should
     {
         [TestCaseSource(nameof(_totalSources))]
-        public void ShouldCalculateTotalOfLineValues(IEnumerable<string> lines, int expected)
+        public void CalculateTotalOfLineValues(IEnumerable<string> lines, int expected)
         {
             Assert.That(Day1.CalculateTotal(lines), Is.EqualTo(expected));
         }
