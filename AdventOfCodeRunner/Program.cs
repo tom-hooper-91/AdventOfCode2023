@@ -8,4 +8,4 @@ Console.WriteLine($"Day 1 = {Day1.CalculateTotal(lines)}");
 // Day 2
 var games = File.ReadAllLines("PuzzleInputs/Day2.txt");
 
-Console.WriteLine($"Day 2 = {games.Sum(Day2.CalculateGameTotal)}");
+Console.WriteLine($"Day 2 = {Day2.CalculateGamesTotal(games)}");

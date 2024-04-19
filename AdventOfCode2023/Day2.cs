@@ -27,20 +27,36 @@ namespace AdventOfCode2023
     // In the example above, games 1, 2, and 5 would have been possible if the bag had been loaded with that configuration. However, game 3 would have been impossible because at one point the Elf showed you 20 red cubes at once; similarly, game 4 would also have been impossible because the Elf showed you 15 blue cubes at once. If you add up the IDs of the games that would have been possible, you get 8.
     // 
     // Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
-    public class Day2
+    public static class Day2
     {
-        private static bool IsGamePossible(List<KeyValuePair<string, int>> game)
+        private static bool IsGamePossible(Game game)
         {
-            var possibleValue = new Dictionary<string, int>
+            var possibleGame = new Game
             {
-                { "red", 12 },
-                { "green", 13 },
-                { "blue", 14 }
+                Number = 0,
+                Rounds = new List<Round>()
+                {
+                    new()
+                    {
+                        Color = Color.Red,
+                        Total = 12
+                    },
+                    new()
+                    {
+                        Color = Color.Green,
+                        Total = 13
+                    },
+                    new()
+                    {
+                        Color = Color.Blue,
+                        Total = 14
+                    }
+                }
             };
 
-            foreach (var colorPair in game)
+            foreach (var possibleRound in possibleGame.Rounds)
             {
-                if (possibleValue.Where(possibleColorPair => colorPair.Key == possibleColorPair.Key).Any(possibleColorPair => colorPair.Value > possibleColorPair.Value))
+                if (game.Rounds.Any(round => round.Color == possibleRound.Color && round.Total > possibleRound.Total))
                 {
                     return false;
                 }
@@ -49,15 +65,21 @@ namespace AdventOfCode2023
             return true;
         }
 
-        public static int CalculateGameTotal(string game)
+        public static int CalculateGamesTotal(IEnumerable<string> games)
         {
-            var colors = new[]
-            {
-                "red",
-                "green",
-                "blue"
-            };
+            var gamesList = games.Select(Game.Parse).ToList();
 
+            return gamesList.Where(IsGamePossible).Sum(game => game.Number);
+        }
+    }
+
+    public class Game
+    {
+        public int Number { get; init; }
+        public required IEnumerable<Round> Rounds { get; init; }
+
+        public static Game Parse(string game)
+        {
             var separators = new[]
             {
                 ':',
@@ -66,25 +88,36 @@ namespace AdventOfCode2023
             };
 
             var gameArray = game.Split(separators);
-            var gameArrayWithoutGameNumber = gameArray.Skip(1).ToArray();
-            var gameList = new List<KeyValuePair<string, int>>();
 
-            foreach (var colorString in gameArrayWithoutGameNumber)
+            return new Game
             {
-                foreach (var color in colors)
-                {
-                    if (!colorString.Contains(color)) continue;
-                    var resultString = Regex.Match(colorString, @"\d+").Value;
-                    gameList.Add(new KeyValuePair<string, int>(color, int.Parse(resultString)));
-                }    
-            }
-
-            if (!IsGamePossible(gameList)) return 0;
-
-            var gameNumberStringPart = gameArray[0];
-            var gameNumberString = Regex.Match(gameNumberStringPart, @"\d+").Value;
-
-            return int.Parse(gameNumberString);
+                Number = int.Parse(gameArray[0].Split(" ")[1]),
+                Rounds = gameArray.Skip(1).Select(roundString => Round.Parse(roundString.Trim()))
+            };
         }
+    }
+
+    public class Round
+    {
+        public Color Color { get; init; }
+        public int Total { get; init; }
+
+        public static Round Parse(string roundString)
+        {
+            var roundArray = roundString.Split(" ");
+
+            return new Round
+            {
+                Total = int.Parse(roundArray[0]),
+                Color = Enum.Parse<Color>(roundArray[1], true)
+            };
+        }
+    }
+
+    public enum Color
+    {
+        Red,
+        Green,
+        Blue
     }
 }
